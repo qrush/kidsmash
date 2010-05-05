@@ -6,6 +6,7 @@ int delay = 4;
 int sX, sY, squareX, squareY;
 int yellowFill = 0, redFill = 121;
 boolean move = true;
+boolean fullscreen = true;
 
 var shapes = [];
 
@@ -21,7 +22,6 @@ function makeRect(x, y, h, w, f1, f2, f3) {
 // Setup the Processing Canvas
 void setup(){
   size( 500, 500 );
-  strokeWeight( 10 );
   frameRate( 15 );
   X = width / 2;
   Y = width / 2;
@@ -45,15 +45,13 @@ void draw(){
   // Track circle to new destination
   X+=(nX-X)/delay;
   Y+=(nY-Y)/delay;
-  
-  // Fill canvas grey
-  background( 100 );
-  
+
   // Set fill-color to blue
   fill( 0, 121, 184 );
-  
+
   // Set stroke-color white
   stroke(255); 
+  strokeWeight( 10 );
 
   // Draw circle
   ellipse( X, Y, radius, radius );
@@ -94,6 +92,13 @@ void keyPressed() {
       yellowFill = temp;
     } else if(key == 's') {
       move = !move;
+    } else if(key == 'f') {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      $("h1").hide();
+      $("p").hide();
+      $("canvas").attr("width", width).attr("height", height);
+      size(width, height);
     }
   }
 }
