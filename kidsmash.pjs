@@ -44,16 +44,52 @@ void setup(){
 }
 
 void mousePressed() {
-  shapes.push(makeRect(mouseX, mouseY, 40, 40, randInt(255), randInt(255), randInt(255)));
+  shapes.push(new Square(100, 100));
 }
 
 int randInt(max) {
   return Math.floor(Math.random()*max);
 }
 
+class Square {
+  int x, y, alpha;
+
+  Square(int xin, int yin) {
+    x = xin;
+    y = yin;
+    alpha = 255;
+  }
+
+  function update() {
+    alpha -= 15;
+    console.log(alpha);
+    return alpha > 0;
+  }
+
+  function draw() {
+    fill(0, 60, 100, alpha);
+    ellipse(x, y, 100, 100);
+  }
+}
+
 // Main draw loop
 void draw(){
+  background(100);
+  noStroke();
+  //fill(0, 6);
+  //rect(0, 0, width, height);
 
+  for(var shape in shapes) {
+    if(shapes[shape] != null) {
+      if(!shapes[shape].update()) {
+       shapes[shape] = null;
+      } else {
+        shapes[shape].draw();
+      }
+    }
+  }
+
+/*
   radius = radius + sin( frameCount / 4 );
 
   // Track circle to new destination
@@ -81,6 +117,7 @@ void draw(){
   for(var shape in shapes) {
     shapes[shape].draw();
   }
+*/
 
 }
 
