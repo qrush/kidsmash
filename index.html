@@ -18,17 +18,40 @@
 float radius = 50.0;
 int X, Y;
 int nX, nY;
-int delay = 16;
+int delay = 4;
+
+int sX, sY, squareX, squareY;
+int yellowFill = 0, redFill = 121;
+boolean move = true;
+
+var shapes = [];
+
+function makeRect(x, y, h, w, f1, f2, f3) {
+  return { 
+    draw: function() {
+      fill(f1, f2, f3);
+      rect(x, y, h, w);
+    },
+  };
+}
 
 // Setup the Processing Canvas
 void setup(){
-  size( 200, 200 );
+  size( 500, 500 );
   strokeWeight( 10 );
   frameRate( 15 );
   X = width / 2;
   Y = width / 2;
   nX = X;
   nY = Y;  
+}
+
+void mousePressed() {
+  shapes.push(makeRect(mouseX, mouseY, 40, 40, randInt(255), randInt(255), randInt(255)));
+}
+
+function randInt(max) {
+  return Math.floor(Math.random()*max);
 }
 
 // Main draw loop
@@ -48,16 +71,48 @@ void draw(){
   
   // Set stroke-color white
   stroke(255); 
-  
-  // Draw circle
-  ellipse( X, Y, radius, radius );                  
-}
 
+  // Draw circle
+  ellipse( X, Y, radius, radius );
+
+  fill(redFill, 0, yellowFill);
+
+  squareX+=(sX-squareX)/delay;
+  squareY+=(sY-squareY)/delay;
+ 
+  // Draw rectangle
+  rect(squareX, squareY, 30.0, 30.0);
+
+  for(var shape in shapes) {
+    shapes[shape].draw();
+  }
+
+}
 
 // Set circle's next destination
 void mouseMoved(){
-  nX = mouseX;
-  nY = mouseY;  
+  if(move) {
+    nX = mouseX;
+    nY = mouseY;  
+  }
+}
+
+void keyPressed() {
+  if(key == CODED) {
+    if(keyCode == UP) {
+      temp = redFill;
+      redFill = yellowFill;
+      yellowFill = temp;
+    }
+  } else {
+    if(key == 't') {
+      temp = redFill;
+      redFill = yellowFill;
+      yellowFill = temp;
+    } else if(key == 's') {
+      move = !move;
+    }
+  }
 }
 </script><canvas width="200px" height="200px"></canvas>
 
