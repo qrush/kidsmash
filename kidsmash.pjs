@@ -8,7 +8,6 @@ int yellowFill = 0, redFill = 121;
 boolean move = true;
 boolean fullscreen = false;
 
-PImage b;
 var shapes = [];
 
 function makeRect(x, y, h, w, f1, f2, f3) {
@@ -21,17 +20,6 @@ function makeRect(x, y, h, w, f1, f2, f3) {
   };
 }
 
-function makeText(x, y, s, f1, f2, f3) {
-  return {
-    draw: function() {
-      stroke(0);
-      textSize(200);
-      fill(f1, f2, f3);
-      text(s, x, y);
-    },
-  };
-}
-
 // Setup the Processing Canvas
 void setup(){
   size( 500, 500 );
@@ -40,7 +28,6 @@ void setup(){
   Y = width / 2;
   nX = X;
   nY = Y;
-  b = loadImage("spongie.gif");
 }
 
 void mousePressed() {
@@ -49,6 +36,33 @@ void mousePressed() {
 
 int randInt(max) {
   return Math.floor(Math.random()*max);
+}
+
+class Text {
+  int f1, f2, f3, x, y, alpha;
+  string s;
+
+  Text(xin, yin, sin, f1in, f2in, f3in) {
+    x = xin;
+    y = yin;
+    s = sin;
+    f1 = f1in;
+    f2 = f2in;
+    f3 = f3in;
+    alpha = 255;
+  }
+
+  function update() {
+    alpha -= 15;
+    return alpha > 0;
+  }
+
+  function draw() {
+    stroke(0);
+    textSize(200);
+    fill(f1, f2, f3);
+    text(s, x, y);
+  }
 }
 
 class Square {
@@ -62,7 +76,6 @@ class Square {
 
   function update() {
     alpha -= 15;
-    console.log(alpha);
     return alpha > 0;
   }
 
@@ -74,7 +87,7 @@ class Square {
 
 // Main draw loop
 void draw(){
-  background(100);
+  background(255);
   noStroke();
   //fill(0, 6);
   //rect(0, 0, width, height);
@@ -88,44 +101,13 @@ void draw(){
       }
     }
   }
-
-/*
-  radius = radius + sin( frameCount / 4 );
-
-  // Track circle to new destination
-  X+=(nX-X)/delay;
-  Y+=(nY-Y)/delay;
-
-  // Set fill-color to blue
-  fill( 0, 121, 184 );
-
-  // Set stroke-color white
-  stroke(255); 
-  strokeWeight( 10 );
-
-  // Draw circle
-  ellipse( X, Y, radius, radius );
-
-  fill(redFill, 0, yellowFill);
-
-  squareX+=(sX-squareX)/delay;
-  squareY+=(sY-squareY)/delay;
- 
-  // Draw rectangle
-  rect(squareX, squareY, 30.0, 30.0);
-
-  for(var shape in shapes) {
-    shapes[shape].draw();
-  }
-*/
-
 }
 
 // Set circle's next destination
 void mouseMoved(){
   if(move) {
     nX = mouseX;
-    nY = mouseY;  
+    nY = mouseY;
   }
 }
 
@@ -156,7 +138,7 @@ void keyPressed() {
     }
 
     var keyStr = String.fromCharCode(key);
-    shapes.push(makeText(randInt(width), randInt(height), keyStr,
+    shapes.push(new Text(randInt(width), randInt(height), keyStr,
 			 randInt(255), randInt(255), randInt(255)));
   }
 }
