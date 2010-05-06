@@ -8,13 +8,26 @@ int yellowFill = 0, redFill = 121;
 boolean move = true;
 boolean fullscreen = false;
 
+PImage b;
 var shapes = [];
 
 function makeRect(x, y, h, w, f1, f2, f3) {
   return {
     draw: function() {
+      stroke(255);
       fill(f1, f2, f3);
       rect(x, y, h, w);
+    },
+  };
+}
+
+function makeText(x, y, s, f1, f2, f3) {
+  return {
+    draw: function() {
+      stroke(0);
+      textSize(200);
+      fill(f1, f2, f3);
+      text(s, x, y);
     },
   };
 }
@@ -27,6 +40,7 @@ void setup(){
   Y = width / 2;
   nX = X;
   nY = Y;
+  b = loadImage("spongie.gif");
 }
 
 void mousePressed() {
@@ -105,8 +119,7 @@ void keyPressed() {
     }
 
     var keyStr = String.fromCharCode(key);
-    stroke(0);
-    textSize(200);
-    text(keyStr, nX, nY);
+    shapes.push(makeText(randInt(width), randInt(height), keyStr,
+			 randInt(255), randInt(255), randInt(255)));
   }
 }
