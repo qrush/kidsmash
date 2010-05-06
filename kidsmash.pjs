@@ -10,16 +10,6 @@ boolean fullscreen = false;
 
 var shapes = [];
 
-function makeRect(x, y, h, w, f1, f2, f3) {
-  return {
-    draw: function() {
-      stroke(255);
-      fill(f1, f2, f3);
-      rect(x, y, h, w);
-    },
-  };
-}
-
 // Setup the Processing Canvas
 void setup(){
   size( 500, 500 );
@@ -28,10 +18,11 @@ void setup(){
   Y = width / 2;
   nX = X;
   nY = Y;
+  textAlign(CENTER);
 }
 
 void mousePressed() {
-  shapes.push(new Square(100, 100));
+  shapes.unshift(new Square(100, 100));
 }
 
 int randInt(max) {
@@ -41,6 +32,8 @@ int randInt(max) {
 class Text {
   int f1, f2, f3, x, y, alpha;
   string s;
+  int fade = 5;
+  int rotation = 0;
 
   Text(xin, yin, sin, f1in, f2in, f3in) {
     x = xin;
@@ -53,15 +46,22 @@ class Text {
   }
 
   function update() {
-    alpha -= 15;
+    alpha -= fade;
     return alpha > 0;
   }
 
   function draw() {
+    pushMatrix();
+    translate(x, y);
+    rotate(radians(rotation));
+    translate(-x,-y);
     stroke(0);
     textSize(200);
-    fill(f1, f2, f3);
+    fill(f1, f2, f3, alpha);
     text(s, x, y);
+    popMatrix();
+
+    rotation += 5;
   }
 }
 
@@ -92,14 +92,18 @@ void draw(){
   //fill(0, 6);
   //rect(0, 0, width, height);
 
-  for(var shape in shapes) {
+  for(var shape=0; shape < shapes.length; shape++) {
     if(shapes[shape] != null) {
       if(!shapes[shape].update()) {
        shapes[shape] = null;
       } else {
         shapes[shape].draw();
       }
-    }
+    } 
+  }
+
+  while(shapes[shapes.length-1] == null && shapes.length > 0) {
+    shapes.pop();
   }
 }
 
@@ -138,7 +142,7 @@ void keyPressed() {
     }
 
     var keyStr = String.fromCharCode(key);
-    shapes.push(new Text(randInt(width), randInt(height), keyStr,
+    shapes.unshift(new Text(randInt(width), randInt(height), keyStr,
 			 randInt(255), randInt(255), randInt(255)));
   }
 }
