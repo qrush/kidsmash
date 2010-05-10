@@ -5,10 +5,36 @@ int yellowFill = 0, redFill = 121;
 boolean move = true;
 var shapes = [];
 
+class Shape {
+  int x, y, alpha;
+  color c;
+
+  Shape(int xin, int yin) {
+    x = xin;
+    y = yin;
+    alpha = 255;
+    c = color(random(255), random(255), random(255));
+  }
+
+  void update(fade) {
+    alpha -= fade;
+    return alpha > 0;
+  }
+
+  void draw(custom) {
+    noStroke();
+    fill(c, alpha);
+    custom.call();
+  }
+}
+
 class Help extends Shape {
   Help() {
     super(0,0)
-    alpha = 2000
+  }
+
+  void update() {
+    return update(5);
   }
 
   void draw() {
@@ -24,70 +50,43 @@ class Help extends Shape {
   }
 }
 
-class Text {
-  int f1, f2, f3, x, y, alpha;
+class Text extends Shape {
   string s;
-  int fade = 3;
   int rotation;
   float rotationAmount;
 
-  Text(xin, yin, sin, f1in, f2in, f3in) {
+  Text(xin, yin, sin) {
+    super(xin, yin);
     x = xin;
     y = yin;
     s = sin;
-    f1 = f1in;
-    f2 = f2in;
-    f3 = f3in;
-    alpha = 255;
     rotation = random(40, 200);
     rotationAmount = Math.random() / 2;
   }
 
-  function update() {
-    alpha -= fade;
+  void update() {
     if(rotation > 0) {
       rotation -= (rotation * rotationAmount);
     } else {
       rotation = 0;
     }
-    return alpha > 0;
+    return update(3);
   }
 
-  function draw() {
-    pushMatrix();
-    translate(x, y);
-    rotate(radians(rotation));
-    translate(-x,-y);
-    stroke(0);
-    textSize(200);
-    fill(f1, f2, f3, alpha);
-    text(s, x, y);
-    popMatrix();
+  void draw() {
+    draw(function() {
+      pushMatrix();
+      translate(x, y);
+      rotate(radians(rotation));
+      translate(-x,-y);
+      stroke(0);
+      textSize(200);
+      fill(c, alpha);
+      text(s, x, y);
+      popMatrix();
 
-    rotation += 5;
-  }
-}
-
-class Shape {
-  int x, y, alpha;
-  color c;
-
-  Shape(int xin, int yin) {
-    x = xin;
-    y = yin;
-    alpha = 255;
-    c = color(random(255), random(255), random(255));
-  }
-
-  void update() {
-    alpha -= 15;
-    return alpha > 0;
-  }
-
-  void draw(custom) {
-    noStroke();
-    fill(c, alpha);
-    custom.call();
+      rotation += 5;
+    });
   }
 }
 
@@ -104,6 +103,10 @@ class Circle extends Shape {
     super(nX, nY);
     circleWidth = w;
     circleHeight = h;
+  }
+
+  void update() {
+    return update(10);
   }
 
   void draw() {
@@ -130,6 +133,10 @@ class Triangle extends Shape {
     super(random(width), random(height));
   }
 
+  void update() {
+    return update(10);
+  }
+
   void draw() {
     draw(function() {
       triangle(x-100, y+100,
@@ -142,6 +149,10 @@ class Triangle extends Shape {
 class Trapezoid extends Shape {
   Trapezoid() {
     super(random(width), random(height));
+  }
+
+  void update() {
+    return update(10);
   }
 
   void draw() {
@@ -157,6 +168,10 @@ class Trapezoid extends Shape {
 class Star extends Shape {
   Star() {
     super(random(width), random(height));
+  }
+
+  void update() {
+    return update(10);
   }
 
   void draw() {
