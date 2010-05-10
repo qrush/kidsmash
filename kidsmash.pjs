@@ -189,6 +189,26 @@ class Star extends Shape {
   }
 }
 
+class Pointer extends Shape {
+  Pointer(int px, int py) {
+    super(px, py);
+  }
+
+  void draw() {
+    draw(function () {
+      beginShape();
+      vertex(x, y);
+      vertex(x, y+40);
+      vertex(x-20, y+30);
+      vertex(x-40, y+50);
+      vertex(x-50, y+40);
+      vertex(x-30, y+20);
+      vertex(x-40, y);
+      endShape();
+    });
+  }
+}
+
 // Setup the Processing Canvas
 void setup() {
   WIDTH = window.innerWidth;
@@ -220,45 +240,42 @@ void draw() {
   }
 }
 
-void mousePressed() {
+Shape randomShape() {
   var which = 0 | random(NUM_SHAPES);
 
   if(which % NUM_SHAPES == 0)
-    shapes.unshift(new Circle());
+    return new Circle();
   else if(which % NUM_SHAPES == 1)
-    shapes.unshift(new Triangle());
+    return new Triangle();
   else if(which % NUM_SHAPES == 2)
-    shapes.unshift(new Trapezoid());
+    return new Trapezoid();
   else if(which % NUM_SHAPES == 3)
-    shapes.unshift(new Star());
+    return new Star();
   else
-    shapes.unshift(new Square());
+    return new Square();
+}
+
+void mousePressed() {
+  shapes.unshift(randomShape());
 }
 
 // Set circle's next destination
 void mouseMoved(){
-    shapes.unshift(new Circle(mouseX, mouseY, 30, 30));
+//  shapes.unshift(new Circle(mouseX, mouseY, 30, 30));
+  shapes.unshift(new Pointer(mouseX, mouseY));
 }
 
 void keyPressed() {
   if(key == CODED) {
-    if(keyCode == UP) {
-      temp = redFill;
-      redFill = yellowFill;
-      yellowFill = temp;
-    }
+    shapes.unshift(randomShape());
   } else {
-    if(key == 't') {
-      temp = redFill;
-      redFill = yellowFill;
-      yellowFill = temp;
-    } else if(key == 's') {
-      move = !move;
-    }
-
     var keyStr = String.fromCharCode(key);
     if(/^[A-Za-z0-9]$/.test(keyStr)) {
-      shapes.unshift(new Text(random(width), random(height), keyStr, random(255), random(255), random(255)));
+      shapes.unshift(new Text(random(width), random(height), 
+		     keyStr, random(255), random(255), random(255)));
+    } else {
+      shapes.unshift(randomShape());
     }
   }
+ 
 }
