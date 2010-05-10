@@ -32,8 +32,9 @@ int randInt(max) {
 class Text {
   int f1, f2, f3, x, y, alpha;
   string s;
-  int fade = 5;
-  int rotation = 0;
+  int fade = 3;
+  int rotation;
+  float rotationAmount;
 
   Text(xin, yin, sin, f1in, f2in, f3in) {
     x = xin;
@@ -43,10 +44,17 @@ class Text {
     f2 = f2in;
     f3 = f3in;
     alpha = 255;
+    rotation = random(40, 200);
+    rotationAmount = Math.random() / 2;
   }
 
   function update() {
     alpha -= fade;
+    if(rotation > 0) {
+      rotation -= (rotation * rotationAmount);
+    } else {
+      rotation = 0;
+    }
     return alpha > 0;
   }
 
@@ -142,7 +150,10 @@ void keyPressed() {
     }
 
     var keyStr = String.fromCharCode(key);
-    shapes.unshift(new Text(randInt(width), randInt(height), keyStr,
-			 randInt(255), randInt(255), randInt(255)));
+    var re = /[a-z]|[A-Z]/;
+    if(re.test(keyStr)) {
+      shapes.unshift(new Text(randInt(width), randInt(height), keyStr,
+      			 randInt(255), randInt(255), randInt(255)));
+    }
   }
 }
