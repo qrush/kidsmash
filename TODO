@@ -1,13 +1,13 @@
 [X] Slow the text roll
-[ ] Triangle shape
-[ ] Square shape
-[ ] Star shape
+[X] Triangle shape
+[X] Square shape
+[X] Star shape
 [ ] Random font types (1-3)
 [X] Fullscreen by default
 [X] Instructions visible
 [X] Title fades out after a while
 [ ] Faces on shapes
 [X] Print only A-Za-z0-9
-[ ] Make a shape class
+[X] Make a shape class
 [X] s/randInt/random
 [ ] resize canvas when window resizes

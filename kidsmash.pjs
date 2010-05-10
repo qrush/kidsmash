@@ -1,4 +1,5 @@
 int WIDTH, HEIGHT;
+int NUM_SHAPES = 5;
 int nX, nY;
 int yellowFill = 0, redFill = 121;
 boolean move = true;
@@ -79,28 +80,107 @@ class Text {
   }
 }
 
-class Square {
+class Shape {
   int x, y, alpha;
+  color c;
 
-  Square(int xin, int yin) {
+  Shape(int xin, int yin) {
     x = xin;
     y = yin;
     alpha = 255;
+    c = color(random(255), random(255), random(255));
   }
 
-  function update() {
+  void update() {
     alpha -= 15;
     return alpha > 0;
   }
 
-  function draw() {
-    fill(0, 60, 100, alpha);
-    ellipse(x, y, 100, 100);
+  void draw(custom) {
+    noStroke();
+    fill(c, alpha);
+    custom.call();
+  }
+}
+
+class Circle extends Shape {
+  Circle() {
+    super(random(width), random(height));
+  }
+
+  void draw() {
+    draw(function() {
+      ellipse(x, y, 200, 200);
+    });
+  }
+}
+
+class Square extends Shape {
+  Square() {
+    super(random(width), random(height));
+  }
+
+  void draw() {
+    draw(function() {
+      rect(x, y, 200, 200);
+    });
+  }
+}
+
+class Triangle extends Shape {
+  Triangle() {
+    super(random(width), random(height));
+  }
+
+  void draw() {
+    draw(function() {
+      triangle(x-100, y+100,
+               x,     y-100,
+               x+100, y+100);
+    });
+  }
+}
+
+class Trapezoid extends Shape {
+  Trapezoid() {
+    super(random(width), random(height));
+  }
+
+  void draw() {
+    draw(function() {
+      quad(x-75,  y-100,
+           x+75,  y-100,
+           x+125, y+100,
+           x-125, y+100)
+    });
+  }
+}
+
+class Star extends Shape {
+  Star() {
+    super(random(width), random(height));
+  }
+
+  void draw() {
+    draw(function() {
+      beginShape();
+      vertex(x, y-100); // top
+      vertex(x-30, y-30);
+      vertex(x-100, y-20); // left
+      vertex(x-50, y+30);
+      vertex(x-60, y+100); // bottom left
+      vertex(x, y+60);
+      vertex(x+60, y+100); // bottom right
+      vertex(x+50, y+30);
+      vertex(x+100, y-20); // right
+      vertex(x+30, y-30);
+      endShape();
+    });
   }
 }
 
 // Setup the Processing Canvas
-void setup(){
+void setup() {
   WIDTH = window.innerWidth;
   HEIGHT = window.innerHeight;
   nX = WIDTH / 2;
@@ -113,7 +193,7 @@ void setup(){
 }
 
 // Main draw loop
-void draw(){
+void draw() {
   background(255);
   noStroke();
 
@@ -133,7 +213,18 @@ void draw(){
 }
 
 void mousePressed() {
-  shapes.unshift(new Square(100, 100));
+  var which = 0 | random(NUM_SHAPES);
+
+  if(which % NUM_SHAPES == 0)
+    shapes.unshift(new Circle());
+  else if(which % NUM_SHAPES == 1)
+    shapes.unshift(new Triangle());
+  else if(which % NUM_SHAPES == 2)
+    shapes.unshift(new Trapezoid());
+  else if(which % NUM_SHAPES == 3)
+    shapes.unshift(new Star());
+  else
+    shapes.unshift(new Square());
 }
 
 // Set circle's next destination
