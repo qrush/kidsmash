@@ -9,5 +9,5 @@
 [ ] Faces on shapes
 [X] Print only A-Za-z0-9
 [ ] Make a shape class
-[ ] s/randInt/random
+[X] s/randInt/random
 [ ] resize canvas when window resizes

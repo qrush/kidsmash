@@ -4,27 +4,6 @@ int yellowFill = 0, redFill = 121;
 boolean move = true;
 var shapes = [];
 
-// Setup the Processing Canvas
-void setup(){
-  WIDTH = window.innerWidth;
-  HEIGHT = window.innerHeight;
-  nX = WIDTH / 2;
-  nY = HEIGHT / 2;
-  shapes.unshift(new Help());
-
-  size(WIDTH, HEIGHT);
-  frameRate(15);
-  textAlign(CENTER);
-}
-
-void mousePressed() {
-  shapes.unshift(new Square(100, 100));
-}
-
-int randInt(max) {
-  return Math.floor(Math.random()*max);
-}
-
 class Help {
   int x, y, alpha;
   int fade = 5;
@@ -120,6 +99,19 @@ class Square {
   }
 }
 
+// Setup the Processing Canvas
+void setup(){
+  WIDTH = window.innerWidth;
+  HEIGHT = window.innerHeight;
+  nX = WIDTH / 2;
+  nY = HEIGHT / 2;
+  shapes.unshift(new Help());
+
+  size(WIDTH, HEIGHT);
+  frameRate(15);
+  textAlign(CENTER);
+}
+
 // Main draw loop
 void draw(){
   background(255);
@@ -138,6 +130,10 @@ void draw(){
   while(shapes[shapes.length-1] == null && shapes.length > 0) {
     shapes.pop();
   }
+}
+
+void mousePressed() {
+  shapes.unshift(new Square(100, 100));
 }
 
 // Set circle's next destination
@@ -165,10 +161,8 @@ void keyPressed() {
     }
 
     var keyStr = String.fromCharCode(key);
-    var re = /[a-z]|[A-Z]/;
-    if(re.test(keyStr)) {
-      shapes.unshift(new Text(randInt(width), randInt(height), keyStr,
-      			 randInt(255), randInt(255), randInt(255)));
+    if(/^[A-Za-z0-9]$/.test(keyStr)) {
+      shapes.unshift(new Text(random(width), random(height), keyStr, random(255), random(255), random(255)));
     }
   }
 }
