@@ -1,6 +1,6 @@
 int WIDTH, HEIGHT;
 int NUM_SHAPES = 5;
-int nX, nY;
+int cursorX, cursorY;
 int yellowFill = 0, redFill = 121;
 boolean move = true;
 var shapes = [];
@@ -104,13 +104,23 @@ class Shape {
 }
 
 class Circle extends Shape {
+  int circleWidth, circleHeight;
+
   Circle() {
     super(random(width), random(height));
+    circleWidth = 200;
+    circleHeight = 200;
+  }
+  
+  Circle(int nX, int nY, int w, int h) {
+    super(nX, nY);
+    circleWidth = w;
+    circleHeight = h;
   }
 
   void draw() {
     draw(function() {
-      ellipse(x, y, 200, 200);
+      ellipse(x, y, circleWidth, circleHeight);
     });
   }
 }
@@ -183,8 +193,6 @@ class Star extends Shape {
 void setup() {
   WIDTH = window.innerWidth;
   HEIGHT = window.innerHeight;
-  nX = WIDTH / 2;
-  nY = HEIGHT / 2;
   shapes.unshift(new Help());
 
   size(WIDTH, HEIGHT);
@@ -229,10 +237,7 @@ void mousePressed() {
 
 // Set circle's next destination
 void mouseMoved(){
-  if(move) {
-    nX = mouseX;
-    nY = mouseY;
-  }
+    shapes.unshift(new Circle(mouseX, mouseY, 30, 30));
 }
 
 void keyPressed() {
