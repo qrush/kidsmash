@@ -38,7 +38,6 @@ class Help extends Shape {
   }
 
   void draw() {
-    pushMatrix();
     textSize(50);
     fill(0,0,0,alpha);
     text("KID SMASH!", x, HEIGHT - 25);
@@ -46,7 +45,6 @@ class Help extends Shape {
     fill(0,0,0,alpha);
     textSize(12);
     text("let your kids play on the computer! press F11 to go full screen", x + 3, HEIGHT - 8);
-    popMatrix();
   }
 }
 
@@ -197,6 +195,10 @@ class Pointer extends Shape {
     super(px, py);
   }
 
+  void update() {
+    return update(10);
+  }
+
   void draw() {
     draw(function () {
       beginShape();
@@ -277,7 +279,6 @@ void mousePressed() {
 
 // Set circle's next destination
 void mouseMoved(){
-//  shapes.unshift(new Circle(mouseX, mouseY, 30, 30));
   shapes.unshift(new Pointer(mouseX, mouseY));
 }
 
@@ -287,11 +288,9 @@ void keyPressed() {
   } else {
     var keyStr = String.fromCharCode(key);
     if(/^[A-Za-z0-9]$/.test(keyStr)) {
-      shapes.unshift(new Text(random(width), random(height), 
-		     keyStr, random(255), random(255), random(255)));
+      shapes.unshift(new Text(random(width), random(height), keyStr));
     } else {
       shapes.unshift(randomShape());
     }
   }
- 
 }
