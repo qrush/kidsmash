@@ -1,23 +1,19 @@
-float radius = 50.0;
-int X, Y;
+int WIDTH, HEIGHT;
 int nX, nY;
-int delay = 4;
-
-int sX, sY, squareX, squareY;
 int yellowFill = 0, redFill = 121;
 boolean move = true;
-boolean fullscreen = false;
-
 var shapes = [];
 
 // Setup the Processing Canvas
 void setup(){
-  size( 500, 500 );
-  frameRate( 15 );
-  X = width / 2;
-  Y = width / 2;
-  nX = X;
-  nY = Y;
+  WIDTH = window.innerWidth;
+  HEIGHT = window.innerHeight;
+  nX = WIDTH / 2;
+  nY = HEIGHT / 2;
+  shapes.unshift(new Help());
+
+  size(WIDTH, HEIGHT);
+  frameRate(15);
   textAlign(CENTER);
 }
 
@@ -27,6 +23,37 @@ void mousePressed() {
 
 int randInt(max) {
   return Math.floor(Math.random()*max);
+}
+
+class Help {
+  int x, y, alpha;
+  int fade = 5;
+
+  Help() {
+    x = 0;
+    y = HEIGHT - 25;
+    alpha = 255;
+  }
+
+  function update() {
+    if(alpha > 0)
+      alpha -= fade;
+
+    return true;
+  }
+
+  function draw() {
+    pushMatrix();
+    textSize(50);
+    fill(0,0,0,alpha);
+    text("KID SMASH!", x, y);
+
+    translate(3, 15);
+    fill(0,0,0);
+    textSize(12);
+    text("let your kids play on the computer! press F11 to go full screen", x, y);
+    popMatrix();
+  }
 }
 
 class Text {
@@ -97,8 +124,6 @@ class Square {
 void draw(){
   background(255);
   noStroke();
-  //fill(0, 6);
-  //rect(0, 0, width, height);
 
   for(var shape=0; shape < shapes.length; shape++) {
     if(shapes[shape] != null) {
@@ -137,16 +162,6 @@ void keyPressed() {
       yellowFill = temp;
     } else if(key == 's') {
       move = !move;
-    } else if(key == 'f') {
-      if(!fullscreen) {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        $("h1").hide();
-        $("p").hide();
-        $("canvas").attr("width", width).attr("height", height);
-        size(width, height);
-        fullscreen = true;
-      }
     }
 
     var keyStr = String.fromCharCode(key);
