@@ -11,3 +11,4 @@
 [X] Make a shape class
 [X] s/randInt/random
 [ ] resize canvas when window resizes
+[ ] Mouse tracking with shape
