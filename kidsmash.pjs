@@ -5,33 +5,21 @@ int yellowFill = 0, redFill = 121;
 boolean move = true;
 var shapes = [];
 
-class Help {
-  int x, y, alpha;
-  int fade = 5;
-
+class Help extends Shape {
   Help() {
-    x = 0;
-    y = HEIGHT - 25;
-    alpha = 255;
+    super(0,0)
+    alpha = 2000
   }
 
-  function update() {
-    if(alpha > 0)
-      alpha -= fade;
-
-    return true;
-  }
-
-  function draw() {
+  void draw() {
     pushMatrix();
     textSize(50);
     fill(0,0,0,alpha);
-    text("KID SMASH!", x, y);
+    text("KID SMASH!", x, HEIGHT - 25);
 
-    translate(3, 15);
-    fill(0,0,0);
+    fill(0,0,0,alpha);
     textSize(12);
-    text("let your kids play on the computer! press F11 to go full screen", x, y);
+    text("let your kids play on the computer! press F11 to go full screen", x + 3, HEIGHT - 8);
     popMatrix();
   }
 }
@@ -111,7 +99,7 @@ class Circle extends Shape {
     circleWidth = 200;
     circleHeight = 200;
   }
-  
+
   Circle(int nX, int nY, int w, int h) {
     super(nX, nY);
     circleWidth = w;
@@ -218,6 +206,19 @@ void setup() {
   size(WIDTH, HEIGHT);
   frameRate(15);
   textAlign(CENTER);
+
+  // Check every second for the window resize
+  setInterval(function() {
+    nWIDTH  = window.innerWidth;
+    nHEIGHT = window.innerHeight;
+
+    if(WIDTH != nWIDTH || HEIGHT != nHEIGHT) {
+      WIDTH  = nWIDTH;
+      HEIGHT = nHEIGHT;
+      shapes.unshift(new Help());
+      size(WIDTH, HEIGHT);
+    }
+  }, 1000);
 }
 
 // Main draw loop

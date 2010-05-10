@@ -10,5 +10,6 @@
 [X] Print only A-Za-z0-9
 [X] Make a shape class
 [X] s/randInt/random
-[ ] resize canvas when window resizes
+[X] resize canvas when window resizes
 [ ] Mouse tracking with shape
+[ ] Instructions on page if you have a crappy browser
