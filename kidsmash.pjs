@@ -204,11 +204,11 @@ class Pointer extends Shape {
       beginShape();
       vertex(x, y);
       vertex(x, y+40);
-      vertex(x-20, y+30);
-      vertex(x-40, y+50);
-      vertex(x-50, y+40);
-      vertex(x-30, y+20);
-      vertex(x-40, y);
+      vertex(x+15, y+25);
+      vertex(x+40, y+50);
+      vertex(x+50, y+40);
+      vertex(x+25, y+15);
+      vertex(x+40, y);
       endShape();
     });
   }
