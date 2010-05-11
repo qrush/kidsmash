@@ -7,6 +7,7 @@ var shapes = [];
 
 class Shape {
   int x, y, alpha;
+  string smile;
   color c;
 
   Shape(int xin, int yin) {
@@ -14,6 +15,7 @@ class Shape {
     y = yin;
     alpha = 255;
     c = color(random(255), random(255), random(255));
+    smile = smiley();
   }
 
   void update(fade) {
@@ -25,6 +27,17 @@ class Shape {
     noStroke();
     fill(c, alpha);
     custom.call();
+  }
+
+  void drawSmiley() {
+    pushMatrix();
+    translate(x, y);
+    rotate(radians(90));
+    translate(-x-25,-y+25);
+    fill(0, 0, 0, alpha)
+    textSize(80);
+    text(smile, x, y);
+    popMatrix();
   }
 }
 
@@ -44,7 +57,7 @@ class Help extends Shape {
 
     fill(0,0,0,alpha);
     textSize(12);
-    text("let your kids play on the computer! press F11 to go full screen", x + 3, HEIGHT - 8);
+    text("let your kids play on the computer! press F11 to go full screen. Inspired by Scott Hanselman's Baby Smash.", x + 3, HEIGHT - 8);
   }
 }
 
@@ -110,6 +123,7 @@ class Circle extends Shape {
   void draw() {
     draw(function() {
       ellipse(x, y, circleWidth, circleHeight);
+      drawSmiley();
     });
   }
 }
@@ -122,6 +136,7 @@ class Square extends Shape {
   void draw() {
     draw(function() {
       rect(x, y, 200, 200);
+      drawSmiley();
     });
   }
 }
@@ -140,6 +155,7 @@ class Triangle extends Shape {
       triangle(x-100, y+100,
                x,     y-100,
                x+100, y+100);
+      drawSmiley();
     });
   }
 }
@@ -159,6 +175,7 @@ class Trapezoid extends Shape {
            x+75,  y-100,
            x+125, y+100,
            x-125, y+100)
+      drawSmiley();
     });
   }
 }
@@ -186,6 +203,7 @@ class Star extends Shape {
       vertex(x+100, y-20); // right
       vertex(x+30, y-30);
       endShape();
+      drawSmiley();
     });
   }
 }
@@ -204,11 +222,11 @@ class Pointer extends Shape {
       beginShape();
       vertex(x, y);
       vertex(x, y+40);
-      vertex(x-20, y+30);
-      vertex(x-40, y+50);
-      vertex(x-50, y+40);
-      vertex(x-30, y+20);
-      vertex(x-40, y);
+      vertex(x+15, y+25);
+      vertex(x+40, y+50);
+      vertex(x+50, y+40);
+      vertex(x+25, y+15);
+      vertex(x+40, y);
       endShape();
     });
   }
@@ -256,6 +274,11 @@ void draw() {
   while(shapes[shapes.length-1] == null && shapes.length > 0) {
     shapes.pop();
   }
+}
+
+string smiley() {
+  var smileys = [":)", ":D", ":P", ":o", ":]", "8)", "8D", "XD", ";)"];
+  return smileys[random(smileys.length)|0];
 }
 
 Shape randomShape() {

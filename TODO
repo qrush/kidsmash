@@ -6,7 +6,7 @@
 [X] Fullscreen by default
 [X] Instructions visible
 [X] Title fades out after a while
-[ ] Faces on shapes
+[X] Faces on shapes
 [X] Print only A-Za-z0-9
 [X] Make a shape class
 [X] s/randInt/random
