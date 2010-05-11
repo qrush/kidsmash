@@ -3,3 +3,15 @@ h1. KIDSMASH
 JavaScript / Processing.js port of "BabySmash":http://babysmash.com/
 
 This was a class assignment for SE444 - Usability. It was fun.
+
+Run by opening @index.html@ in one of the Recommended Browsers.
+
+h2. Dependencies
+
+"Processing.js":http://processingjs.org/
+"JQuery":http://jquery.com/
+
+h2. Recommended Browsers
+
+"Google Chrome":http://www.google.com/chrome
+"Firefox":http://firefox.com

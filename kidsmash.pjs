@@ -1,15 +1,21 @@
-int WIDTH, HEIGHT;
-int NUM_SHAPES = 5;
-int cursorX, cursorY;
-int yellowFill = 0, redFill = 121;
-boolean move = true;
-var shapes = [];
+/*
+ * KIDSMASH.pjs
+ *
+ * Main logic for the game
+ */
 
+int WIDTH, HEIGHT;  // Holds current window width/height
+int NUM_SHAPES = 5; // Total number of shapes available to randomly generate
+array shapes = [];  // List of shapes/particles visible
+
+// Defines how a shape behaves and maintains its state.
+// Each Shape subclass should implment update() and draw()
 class Shape {
-  int x, y, alpha;
-  string smile;
-  color c;
+  int x, y, alpha; // x, y coordinate and alpha opacity
+  string smile;    // smiley assigned to this shape
+  color c;         // color of this shape
 
+  // default constructor, randomly generates location, color, smiley
   Shape(int xin, int yin) {
     x = xin;
     y = yin;
@@ -18,17 +24,22 @@ class Shape {
     smile = smiley();
   }
 
+  // shape disappears when this method returns false (alpha <= 0)
+  // takes in the rate at which it should fade
   void update(fade) {
     alpha -= fade;
     return alpha > 0;
   }
 
+  // draws this shape with the given random color, current opacity
+  // consumes a function that defines custom drawing methods
   void draw(custom) {
     noStroke();
     fill(c, alpha);
     custom.call();
   }
 
+  // paints the assigned smiley on top of this shape
   void drawSmiley() {
     pushMatrix();
     translate(x, y);
@@ -41,6 +52,7 @@ class Shape {
   }
 }
 
+// Paints helpful instructions in the lower right hand corner of the screen
 class Help extends Shape {
   Help() {
     super(0,0)
@@ -61,6 +73,7 @@ class Help extends Shape {
   }
 }
 
+// Used for letters that appear and rotate into place when normal keys are pressed
 class Text extends Shape {
   string s;
   int rotation;
@@ -75,6 +88,7 @@ class Text extends Shape {
     rotationAmount = Math.random() / 2;
   }
 
+  // Rotates the shape along with fading it out
   void update() {
     if(rotation > 0) {
       rotation -= (rotation * rotationAmount);
@@ -101,15 +115,18 @@ class Text extends Shape {
   }
 }
 
+// draws a circle with the given width/height
 class Circle extends Shape {
   int circleWidth, circleHeight;
 
+  // default constructor picks a random location
   Circle() {
     super(random(width), random(height));
     circleWidth = 200;
     circleHeight = 200;
   }
 
+  // custom constructor to define where and how big the circle is drawn
   Circle(int nX, int nY, int w, int h) {
     super(nX, nY);
     circleWidth = w;
@@ -128,6 +145,7 @@ class Circle extends Shape {
   }
 }
 
+// Draws a square with a smiley
 class Square extends Shape {
   Square() {
     super(random(width), random(height));
@@ -141,6 +159,7 @@ class Square extends Shape {
   }
 }
 
+// Draws a triangle with a smiley
 class Triangle extends Shape {
   Triangle() {
     super(random(width), random(height));
@@ -160,6 +179,7 @@ class Triangle extends Shape {
   }
 }
 
+// Draws a trapezoid with a smiley
 class Trapezoid extends Shape {
   Trapezoid() {
     super(random(width), random(height));
@@ -180,6 +200,7 @@ class Trapezoid extends Shape {
   }
 }
 
+// Draws a star with a smiley
 class Star extends Shape {
   Star() {
     super(random(width), random(height));
@@ -208,6 +229,7 @@ class Star extends Shape {
   }
 }
 
+// Draws the pointer which follows the mouse around
 class Pointer extends Shape {
   Pointer(int px, int py) {
     super(px, py);
@@ -234,10 +256,13 @@ class Pointer extends Shape {
 
 // Setup the Processing Canvas
 void setup() {
+
+  // Set the initial width/height and help text
   WIDTH = window.innerWidth;
   HEIGHT = window.innerHeight;
   shapes.unshift(new Help());
 
+  // Default canvas to full screen and other global settings
   size(WIDTH, HEIGHT);
   frameRate(15);
   textAlign(CENTER);
@@ -247,6 +272,7 @@ void setup() {
     nWIDTH  = window.innerWidth;
     nHEIGHT = window.innerHeight;
 
+    // If either the height or width have changed, resize and repaint help
     if(WIDTH != nWIDTH || HEIGHT != nHEIGHT) {
       WIDTH  = nWIDTH;
       HEIGHT = nHEIGHT;
@@ -258,9 +284,14 @@ void setup() {
 
 // Main draw loop
 void draw() {
+  // Set background to white
   background(255);
   noStroke();
 
+  // particle system lifecycle
+  // for each shape:
+  //   if update() returns false, nix it from the list
+  //   if update() returns true, draw() it
   for(var shape=0; shape < shapes.length; shape++) {
     if(shapes[shape] != null) {
       if(!shapes[shape].update()) {
@@ -271,16 +302,18 @@ void draw() {
     } 
   }
 
-  while(shapes[shapes.length-1] == null && shapes.length > 0) {
+  // Remove null shapes to reduce list size
+  while(shapes[shapes.length-1] == null && shapes.length > 0)
     shapes.pop();
-  }
 }
 
+// returns a random smiley
 string smiley() {
   var smileys = [":)", ":D", ":P", ":o", ":]", "8)", "8D", "XD", ";)"];
   return smileys[random(smileys.length)|0];
 }
 
+// returns a random shape from our given shapes
 Shape randomShape() {
   var which = 0 | random(NUM_SHAPES);
 
@@ -296,6 +329,7 @@ Shape randomShape() {
     return new Square();
 }
 
+// create a random shape when the mouse is pressed
 void mousePressed() {
   shapes.unshift(randomShape());
 }
@@ -305,6 +339,8 @@ void mouseMoved(){
   shapes.unshift(new Pointer(mouseX, mouseY));
 }
 
+// if a number or letter key has been pressed, create a new Text for it
+// otherwise generate a random shape
 void keyPressed() {
   if(key == CODED) {
     shapes.unshift(randomShape());
